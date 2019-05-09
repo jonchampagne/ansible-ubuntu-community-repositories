@@ -1,0 +1,25 @@
+---
+- name: Enable community repositories
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+    update_cache: false
+  loop:
+  - deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release }} main universe
+  - deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release }}-security main universe 
+  - deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release }}-updates main universe
+  - deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release }} main restricted
+  - deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release }}-security main restricted
+  - deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release }}-updates main restricted
+  - deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release }} main multiverse
+  - deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release }}-security main multiverse
+  - deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release }}-updates main multiverse
+  become: true
+
+- name: Update apt cache
+  apt:
+    update_cache: true
+  become: true
+  retries: 120
+  delay: 1
+  ignore_errors: yes
